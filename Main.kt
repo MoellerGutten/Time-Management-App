@@ -2,16 +2,12 @@
 fun parseInput(input : String): List<String> {
     val reg = Regex("(?=[+-])")
     val parsedInput: List<String> = input.split(reg)
-    var newList: MutableList<String> = parsedInput.toMutableList()
-    newList.removeAt(0)
+    val newList: MutableList<String> = parsedInput.toMutableList()
+    if (newList[0] == "") {
+        newList.removeAt(0)
+    }
 
     return newList
-}
-
-fun findOperators(listToCheck : MutableList<String>): MutableList<String> {
-    println(listToCheck)
-
-    return listToCheck
 }
 
 fun addition(a: Double, b: Double): Double {
@@ -33,23 +29,32 @@ fun division(a: Double, b: Double): Double {
 fun main() {
     print("Enter a number: ")
     val input: String = readln()
-    val result = parseInput(input)
+    val parsedInput = parseInput(input)
+    var result : Double = 0.0
 
-    println(result)
-
-
-    if (result[1][0] == '+') {
-        println(addition(result[0].toDouble(), result[1].toDouble()))
+    println(parsedInput)
+    //println(parsedInput.size)
+    var i : Int = 0
+    parsedInput.forEach {token ->
+        if (i == 0 && token[0] != '+' || i == 0 && token[0] != '-') {
+            result += parsedInput[0].toDouble()
+        }
+        else {
+            println(result)
+            println("Im a dumb whoer $i, $token")
+            if (token[0] == '+' && i < parsedInput.size) {
+                print("Jeg plus $result med ")
+                println(parsedInput[i])
+                result += parsedInput[i].toDouble()
+            }
+            if (token[0] == '-' && i < parsedInput.size) {
+                print("Jeg minus $result med ")
+                println(parsedInput[i])
+                result += parsedInput[i].toDouble()
+            }
+        }
+        i += 1
     }
-    if (result[1][0] == '-') {
-        println(subtraction(result[0].take(1).toDouble(), result[1].take(1).toDouble()))
-    }
+    println("AND THE RESULT ISSS: $result")
 
-    //val a = input1.toDouble()
-    //val b = input2.toDouble()
-
-    //println(addition(a, b))
-    //println(subtraction(a, b))
-    //println(multiplication(a, b))
-    //println(division(a, b))
 }
