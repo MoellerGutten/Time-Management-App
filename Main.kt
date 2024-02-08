@@ -10,16 +10,36 @@ fun parseInput(input : String): List<String> {
     return newList
 }
 
-fun addition(a: Double, b: Double): Double {
-    return a + b
-}
+fun multivision(list : List<String>): List<String> {
+    var result : Double = 0.0
+    var mulIndex : List<Int> = listOf()
 
-fun subtraction(a: Double, b: Double): Double {
-    return a - b
-}
+    list.forEachIndexed() { i, num ->
+        num.forEach { char ->
+            if (char == '*') {
+                mulIndex += i
+                println("I found a * at $mulIndex")
+            }
+        }
 
-fun multiplication(a: Double, b: Double): Double {
-    return a * b
+    }
+    println(mulIndex)
+    val reg = Regex("(?=[*])")
+    var newList : List<String> = list.toString().removeSurrounding("[","]").split(reg)
+
+    println(newList)
+    mulIndex.forEach() {num ->
+        if (newList[num+1][0] == '*') {
+            newList[num+1].removePrefix(" *")
+            println(newList[num+1])
+            result += newList[num].toDouble() * newList[num+1].toDouble()
+            newList.toMutableList().removeAt(num)
+            newList.toMutableList().removeAt(num+1)
+            newList.toMutableList().add(num, result.toString())
+        }
+    }
+    println("Finished $newList")
+    return newList
 }
 
 fun division(a: Double, b: Double): Double {
@@ -34,8 +54,11 @@ fun main() {
 
     println(parsedInput)
     //println(parsedInput.size)
-    var i : Int = 0
-    parsedInput.forEach {token ->
+
+
+    multivision(parsedInput)
+
+    parsedInput.forEachIndexed {i, token ->
         if (i == 0 && token[0] != '+' || i == 0 && token[0] != '-') {
             result += parsedInput[0].toDouble()
         }
@@ -53,7 +76,6 @@ fun main() {
                 result += parsedInput[i].toDouble()
             }
         }
-        i += 1
     }
     println("AND THE RESULT ISSS: $result")
 
